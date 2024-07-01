@@ -1,0 +1,15 @@
+{
+  "name": "chatbot-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.1.3",
+    "ollama": "^0.5.2"
+  }
+}

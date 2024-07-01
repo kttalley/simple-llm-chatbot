@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot</title>
+</head>
+<body>
+  <div id="chat-container">
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" />
+      <select id="model">
+        <option value="llava-phi3:latest">llava-phi3</option>
+        <option value="moondream">moondream</option>
+        <!-- Add more options as needed -->
+      </select>
+      <button>Send</button>
+    </form>
+    <div id="loading-message" style="display: none;">Loading...</div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Inline script to initialize socket connection
+    const socket = io();
+
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const messages = document.getElementById('messages');
+    const loadingMessage = document.getElementById('loading-message');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (input.value) {
+        const message = {
+          text: input.value,
+          model: document.getElementById('model').value
+        };
+        socket.emit('chat message', message);
+        input.value = '';
+        loadingMessage.style.display = 'block';
+      }
+    });
+
+    socket.on('chat response', function(msg) {
+      loadingMessage.style.display = 'none';
+      const item = document.createElement('li');
+      item.textContent = msg;
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  </script>
+</body>
+</html>
